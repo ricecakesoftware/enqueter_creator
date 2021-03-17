@@ -1,4 +1,4 @@
-package jp.ricecakesoftware.enqueter.enqueter_creator
+package jp.ricecakesoftware.enqueter.creator
 
 import io.flutter.embedding.android.FlutterActivity
 

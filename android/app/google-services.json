@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "559642985764",
+    "firebase_url": "https://enqueter-project-default-rtdb.firebaseio.com",
+    "project_id": "enqueter-project",
+    "storage_bucket": "enqueter-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:559642985764:android:f28de306d8d2017e5b1fb1",
+        "android_client_info": {
+          "package_name": "jp.ricecakesoftware.enqueter.creator"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "559642985764-4h3kmlfn80qtk1m9rsvabcicqkss9v7b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZ50SHeGfwGImGGa1-k0_0XZUfl4Pqe_c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "559642985764-4h3kmlfn80qtk1m9rsvabcicqkss9v7b.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "559642985764-jkp0hld4jscvtviqjndbkfrbr6jrghcb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "jp.ricecakesoftware.enqueter"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
