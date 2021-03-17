@@ -1,0 +1,32 @@
+name: enqueter_creator
+description: アンケート作成アプリ
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=2.12.0 <3.0.0'
+  flutter: '>=2.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.2
+  simple_logger: ^1.8.0
+  flutter_riverpod: ^0.13.1
+  flutter_native_splash: ^1.1.1
+  firebase_core: ^1.0.1
+  firebase_auth: ^1.0.1
+  firebase_crashlytics: ^1.0.0
+  firebase_performance: ^0.6.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
