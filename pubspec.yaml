@@ -18,7 +18,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   simple_logger: ^1.8.0
   flutter_riverpod: ^0.13.1
-  flutter_native_splash: ^1.1.1
+  flutter_native_splash: ^1.1.4+1
   firebase_core: ^1.0.1
   firebase_auth: ^1.0.1
 

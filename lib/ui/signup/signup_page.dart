@@ -16,8 +16,11 @@ class SignupPage extends ConsumerWidget {
             obscureText: true,
           ),
           ElevatedButton(
-              onPressed: () {},
-              child: Text('Sign up')
+            onPressed: () {},
+            child: Text('Sign up'),
+            style: ElevatedButton.styleFrom(
+              primary: Theme.of(context).primaryColor,
+            ),
           ),
         ],
       ),

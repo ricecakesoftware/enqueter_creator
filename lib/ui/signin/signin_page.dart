@@ -17,13 +17,19 @@ class SigninPage extends ConsumerWidget {
           ),
           ElevatedButton(
             onPressed: () {},
-            child: Text('Sign in')
+            child: Text('Sign in'),
+            style: ElevatedButton.styleFrom(
+              primary: Theme.of(context).primaryColor,
+            ),
           ),
           ElevatedButton(
             onPressed: () {
               Navigator.of(context).pushNamed('/signup');
             },
-            child: Text('Sing up')
+            child: Text('Sing up'),
+            style: ElevatedButton.styleFrom(
+              primary: Theme.of(context).accentColor,
+            ),
           ),
         ],
       ),

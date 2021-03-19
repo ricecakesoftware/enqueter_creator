@@ -9,13 +9,12 @@ class App extends ConsumerWidget {
   Widget build(BuildContext context, ScopedReader watch) {
     return MaterialApp(
       title: 'あんけたー',
-      theme: ThemeData(
-          primarySwatch: Colors.blue,
-          visualDensity: VisualDensity.adaptivePlatformDensity
-      ),
+      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(),
+      themeMode: ThemeMode.system,
       initialRoute: '/signin',
       routes: <String, WidgetBuilder> {
-        '/': (context) => HomePage(),
+        '/home': (context) => HomePage(),
         '/signin': (context) => SigninPage(),
         '/signup': (context) => SignupPage(),
       },
