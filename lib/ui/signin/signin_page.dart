@@ -11,10 +11,13 @@ class SigninPage extends ConsumerWidget {
         children: [
           TextFormField(
             decoration: InputDecoration(labelText: 'メールアドレス'),
+            onChanged: watch(signinViewModelProvider).changeEmail,
           ),
           TextFormField(
             decoration: InputDecoration(labelText: 'パスワード'),
             obscureText: true,
+            onChanged: watch(signinViewModelProvider).changePassword,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
           ),
           ElevatedButton(
             onPressed: watch(signinViewModelProvider).signin,
