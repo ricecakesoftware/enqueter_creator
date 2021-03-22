@@ -1,27 +1,28 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'navigator_key.dart';
 
 final Provider<NavigationService> navigationServiceProvider = Provider((ref) => NavigationService());
 
 class NavigationService {
-  final GlobalKey<NavigatorState> _navigatorKey = new GlobalKey<NavigatorState>();
-  GlobalKey<NavigatorState> get navigatorKey => _navigatorKey;
-
   Future<dynamic> push(String routeName, {Object? args}) {
-    return _navigatorKey.currentState!.pushNamed(routeName, arguments: args);
+    final NavigatorKey navigatorKey = NavigatorKey();
+    return navigatorKey.value.currentState!.pushNamed(routeName, arguments: args);
   }
 
   Future<dynamic> pushReplacement(String routeName, {Object? args}) {
-    return _navigatorKey.currentState!.pushReplacementNamed(routeName, arguments: args);
+    final NavigatorKey navigatorKey = NavigatorKey();
+    return navigatorKey.value.currentState!.pushReplacementNamed(routeName, arguments: args);
   }
 
   Future<dynamic> pushAndRemoveUntil(String routeName, {Object? args}) {
-    return _navigatorKey.currentState!.pushNamedAndRemoveUntil(routeName, (_) => false, arguments: args);
+    final NavigatorKey navigatorKey = NavigatorKey();
+    return navigatorKey.value.currentState!.pushNamedAndRemoveUntil(routeName, (_) => false, arguments: args);
   }
 
   bool pop() {
-    if (_navigatorKey.currentState!.canPop()) {
-      _navigatorKey.currentState!.pop();
+    final NavigatorKey navigatorKey = NavigatorKey();
+    if (navigatorKey.value.currentState!.canPop()) {
+      navigatorKey.value.currentState!.pop();
       return true;
     } else {
       return false;

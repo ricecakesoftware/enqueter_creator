@@ -8,11 +8,14 @@ class SignupPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: Text('Sign up')),
       body: Form(
+        key: watch(signupViewModelProvider).formKey,
         child: Column(
           children: [
             TextFormField(
               decoration: InputDecoration(labelText: 'メールアドレス'),
               onChanged: watch(signupViewModelProvider).changeEmail,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              validator: watch(signupViewModelProvider).validateEmail,
             ),
             TextFormField(
               decoration: InputDecoration(

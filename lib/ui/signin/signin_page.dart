@@ -7,33 +7,39 @@ class SigninPage extends ConsumerWidget {
   Widget build(BuildContext context, ScopedReader watch) {
     return Scaffold(
       appBar: AppBar(title: Text('Sign in')),
-      body: Column(
-        children: [
-          TextFormField(
-            decoration: InputDecoration(labelText: 'メールアドレス'),
-            onChanged: watch(signinViewModelProvider).changeEmail,
-          ),
-          TextFormField(
-            decoration: InputDecoration(labelText: 'パスワード'),
-            obscureText: true,
-            onChanged: watch(signinViewModelProvider).changePassword,
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-          ),
-          ElevatedButton(
-            onPressed: watch(signinViewModelProvider).signin,
-            child: Text('Sign in'),
-            style: ElevatedButton.styleFrom(
-              primary: Theme.of(context).primaryColor,
+      body: Form(
+        key: watch(signinViewModelProvider).formKey,
+        child: Column(
+          children: [
+            TextFormField(
+              decoration: InputDecoration(labelText: 'メールアドレス'),
+              onChanged: watch(signinViewModelProvider).changeEmail,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              validator: watch(signinViewModelProvider).validateEmail,
             ),
-          ),
-          ElevatedButton(
-            onPressed: watch(signinViewModelProvider).navigateSignup,
-            child: Text('Sing up'),
-            style: ElevatedButton.styleFrom(
-              primary: Theme.of(context).accentColor,
+            TextFormField(
+              decoration: InputDecoration(labelText: 'パスワード'),
+              obscureText: true,
+              onChanged: watch(signinViewModelProvider).changePassword,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              validator: watch(signinViewModelProvider).validatePassword,
             ),
-          ),
-        ],
+            ElevatedButton(
+              onPressed: watch(signinViewModelProvider).signin,
+              child: Text('Sign in'),
+              style: ElevatedButton.styleFrom(
+                primary: Theme.of(context).primaryColor,
+              ),
+            ),
+            ElevatedButton(
+              onPressed: watch(signinViewModelProvider).navigateSignup,
+              child: Text('Sing up'),
+              style: ElevatedButton.styleFrom(
+                primary: Theme.of(context).accentColor,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

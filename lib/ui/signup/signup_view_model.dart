@@ -7,8 +7,10 @@ final ChangeNotifierProvider<SignupViewModel> signupViewModelProvider = ChangeNo
 class SignupViewModel extends ChangeNotifier {
   ProviderReference _ref;
 
+  final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   String _email = '';
   String _password = '';
+  GlobalKey<FormState> get formKey => _formKey;
   String get email => _email;
   String get password => _password;
 
@@ -24,6 +26,10 @@ class SignupViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  String? validateEmail(String? value) {
+    return (value == null || value.isEmpty) ? 'メールアドレスを入力してください' : null;
+  }
+
   String? validatePassword(String? value) {
     return (value == null || value.length < 6) ? '文字数が不足しています' : null;
   }
@@ -33,8 +39,10 @@ class SignupViewModel extends ChangeNotifier {
   }
 
   void signup() {
-    if (!_ref.watch(navigationServiceProvider).pop()) {
-      _ref.watch(navigationServiceProvider).pushReplacement('/signin');
+    if (_formKey.currentState!.validate()) {
+      if (!_ref.watch(navigationServiceProvider).pop()) {
+        _ref.watch(navigationServiceProvider).pushReplacement('/signin');
+      }
     }
   }
 }
