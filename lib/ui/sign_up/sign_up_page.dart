@@ -1,21 +1,21 @@
-import 'package:enqueter_creator/ui/signup/signup_view_model.dart';
+import 'package:enqueter_creator/ui/sign_up/sign_up_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SignupPage extends ConsumerWidget {
+class SignUpPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     return Scaffold(
-      appBar: AppBar(title: Text('Sign up')),
+      appBar: AppBar(title: Text('Sign Up')),
       body: Form(
-        key: watch(signupViewModelProvider).formKey,
+        key: watch(signUpViewModelProvider).formKey,
         child: Column(
           children: [
             TextFormField(
               decoration: InputDecoration(labelText: 'メールアドレス'),
-              onChanged: watch(signupViewModelProvider).changeEmail,
+              onChanged: watch(signUpViewModelProvider).changeEmail,
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              validator: watch(signupViewModelProvider).validateEmail,
+              validator: watch(signUpViewModelProvider).validateEmail,
             ),
             TextFormField(
               decoration: InputDecoration(
@@ -23,18 +23,18 @@ class SignupPage extends ConsumerWidget {
                 hintText: '6文字以上で入力してください',
               ),
               obscureText: true,
-              onChanged: watch(signupViewModelProvider).changePassword,
+              onChanged: watch(signUpViewModelProvider).changePassword,
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              validator: watch(signupViewModelProvider).validatePassword,
+              validator: watch(signUpViewModelProvider).validatePassword,
             ),
             TextFormField(
               decoration: InputDecoration(labelText: 'パスワード(確認用)'),
               obscureText: true,
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              validator: watch(signupViewModelProvider).validateConfirmPassword,
+              validator: watch(signUpViewModelProvider).validateConfirmPassword,
             ),
             ElevatedButton(
-              onPressed: watch(signupViewModelProvider).signup,
+              onPressed: watch(signUpViewModelProvider).signUp,
               child: Text('Sign up'),
               style: ElevatedButton.styleFrom(
                 primary: Theme.of(context).primaryColor,

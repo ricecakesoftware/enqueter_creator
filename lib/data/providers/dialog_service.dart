@@ -1,6 +1,6 @@
+import 'package:enqueter_creator/utils/navigator_key.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'navigator_key.dart';
 
 final Provider<DialogService> dialogServiceProvider = Provider((ref) => DialogService());
 

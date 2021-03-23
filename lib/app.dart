@@ -1,6 +1,6 @@
 import 'package:enqueter_creator/ui/home/home_page.dart';
-import 'package:enqueter_creator/ui/signin/signin_page.dart';
-import 'package:enqueter_creator/ui/signup/signup_page.dart';
+import 'package:enqueter_creator/ui/sign_in/sign_in_page.dart';
+import 'package:enqueter_creator/ui/sign_up/sign_up_page.dart';
 import 'package:enqueter_creator/utils/navigator_key.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -19,10 +19,10 @@ class App extends ConsumerWidget {
       navigatorKey: navigatorKey.value,
       routes: <String, WidgetBuilder> {
         '/home': (context) => HomePage(),
-        '/signin': (context) => SigninPage(),
-        '/signup': (context) => SignupPage(),
+        '/sign_in': (context) => SignInPage(),
+        '/sign_up': (context) => SignUpPage(),
       },
-      initialRoute: '/signin',
+      initialRoute: '/sign_in',
     );
   }
 }
