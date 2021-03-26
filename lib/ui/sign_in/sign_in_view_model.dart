@@ -1,7 +1,9 @@
-import 'package:enqueter_creator/data/providers/dialog_service.dart';
-import 'package:enqueter_creator/data/providers/navigation_service.dart';
+import 'package:enqueter_creator/data/services/dialog_service.dart';
+import 'package:enqueter_creator/data/services/navigation_service.dart';
+import 'package:enqueter_creator/data/repositories/profile_repository.dart';
 import 'package:enqueter_creator/utils/firebase_auth_exception_helper.dart';
 import 'package:enqueter_creator/utils/logger.dart';
+import 'package:enqueter_creator/utils/user_profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -41,23 +43,27 @@ class SignInViewModel extends ChangeNotifier {
   void signIn() async {
     if (_formKey.currentState!.validate()) {
       try {
-        final FirebaseAuth auth = FirebaseAuth.instance;
-        final UserCredential result = await auth.signInWithEmailAndPassword(
-          email: _email,
-          password: _password,
-        );
-        final User user = result.user!;
-        _ref.watch(navigationServiceProvider).pushReplacement('/home', args: user);
+        await _ref.watch(dialogServiceProvider).showCircularProgressIndicatorDialog(() async {
+          final FirebaseAuth auth = FirebaseAuth.instance;
+          final UserCredential result = await auth.signInWithEmailAndPassword(
+            email: _email,
+            password: _password,
+          );
+          UserProfile userProfile = UserProfile();
+          userProfile.user = result.user!;
+          userProfile.profile = await _ref.watch(profileRepositoryProvider).selectByUserUid(result.user!.uid);
+        });
+        _ref.watch(navigationServiceProvider).pushReplacement('/home');
       } on FirebaseAuthException catch (e) {
         logger.severe(e);
-        _ref.watch(dialogServiceProvider).showAlertDialog(
+        await _ref.watch(dialogServiceProvider).showAlertDialog(
           'Firebaseエラー',
           FirebaseAuthExceptionHelper.message(e.code)
         );
       } catch (e, s) {
         logger.shout(e);
         logger.shout(s);
-        _ref.watch(dialogServiceProvider).showAlertDialog('例外発生', e.toString());
+        await _ref.watch(dialogServiceProvider).showAlertDialog('例外発生', e.toString());
       }
     }
   }

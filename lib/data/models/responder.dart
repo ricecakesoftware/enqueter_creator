@@ -8,10 +8,10 @@ class Responder extends ChangeNotifier {
     notifyListeners();
   }
 
-  String _email = '';
-  String get email => _email;
-  set email(String email) {
-    _email = email;
+  String _userUid = '';
+  String get userUid => _userUid;
+  set email(String userUid) {
+    _userUid = userUid;
     notifyListeners();
   }
 }
