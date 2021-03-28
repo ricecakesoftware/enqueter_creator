@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class HomePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    watch(homeViewModelProvider).navigateProfileIfUnregistered();
     return Scaffold(
       appBar: AppBar(title: Text('Home')),
       body: Column(

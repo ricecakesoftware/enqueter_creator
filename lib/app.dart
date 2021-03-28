@@ -1,4 +1,5 @@
 import 'package:enqueter_creator/ui/home/home_page.dart';
+import 'package:enqueter_creator/ui/profile/profile_page.dart';
 import 'package:enqueter_creator/ui/sign_in/sign_in_page.dart';
 import 'package:enqueter_creator/ui/sign_up/sign_up_page.dart';
 import 'package:enqueter_creator/utils/navigator_key.dart';
@@ -21,6 +22,7 @@ class App extends ConsumerWidget {
         '/home': (context) => HomePage(),
         '/sign_in': (context) => SignInPage(),
         '/sign_up': (context) => SignUpPage(),
+        '/profile': (context) => ProfilePage(),
       },
       initialRoute: '/sign_in',
     );

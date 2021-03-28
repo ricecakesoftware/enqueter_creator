@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-class HomePage extends ConsumerWidget {
+class ProfilePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     return Scaffold(
@@ -21,24 +21,23 @@ class HomePage extends ConsumerWidget {
             ),
             Row(
               children: [
-                Text('性別'),
                 RadioListTile(
                   title: Text('男性'),
                   value: 0,
-                  groupValue: watch(profileViewModelProvider).profile.gender,
+                  groupValue: watch(profileViewModelProvider).gender,
                   onChanged: watch(profileViewModelProvider).changeGender
                 ),
                 RadioListTile(
-                    title: Text('女性'),
-                    value: 1,
-                    groupValue: watch(profileViewModelProvider).profile.gender,
-                    onChanged: watch(profileViewModelProvider).changeGender
+                  title: Text('女性'),
+                  value: 1,
+                  groupValue: watch(profileViewModelProvider).gender,
+                  onChanged: watch(profileViewModelProvider).changeGender
                 ),
                 RadioListTile(
-                    title: Text('不明'),
-                    value: 2,
-                    groupValue: watch(profileViewModelProvider).profile.gender,
-                    onChanged: watch(profileViewModelProvider).changeGender
+                  title: Text('不明'),
+                  value: 2,
+                  groupValue: watch(profileViewModelProvider).gender,
+                  onChanged: watch(profileViewModelProvider).changeGender
                 ),
               ],
             ),

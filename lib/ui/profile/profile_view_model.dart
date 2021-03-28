@@ -11,6 +11,8 @@ class ProfileViewModel extends ChangeNotifier {
   ProviderReference _ref;
   Profile _profile = new Profile();
   Profile get profile => _profile;
+  int? _gender = 0;
+  int? get gender => _gender;
 
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   GlobalKey<FormState> get formKey => _formKey;

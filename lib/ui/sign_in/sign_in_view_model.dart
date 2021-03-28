@@ -43,17 +43,25 @@ class SignInViewModel extends ChangeNotifier {
   void signIn() async {
     if (_formKey.currentState!.validate()) {
       try {
+        UserProfile userProfile = UserProfile();
         await _ref.watch(dialogServiceProvider).showCircularProgressIndicatorDialog(() async {
           final FirebaseAuth auth = FirebaseAuth.instance;
           final UserCredential result = await auth.signInWithEmailAndPassword(
             email: _email,
             password: _password,
           );
-          UserProfile userProfile = UserProfile();
           userProfile.user = result.user!;
           userProfile.profile = await _ref.watch(profileRepositoryProvider).selectByUserUid(result.user!.uid);
         });
-        _ref.watch(navigationServiceProvider).pushReplacement('/home');
+        if (userProfile.profile == null) {
+          await _ref.watch(dialogServiceProvider).showAlertDialog(
+              'プロフィール未登録',
+              'プロフィールが登録されていません。先にプロフィールの登録をお願いします。'
+          );
+          _ref.watch(navigationServiceProvider).pushReplacement('/profile');
+        } else {
+          _ref.watch(navigationServiceProvider).pushReplacement('/home');
+        }
       } on FirebaseAuthException catch (e) {
         logger.severe(e);
         await _ref.watch(dialogServiceProvider).showAlertDialog(
