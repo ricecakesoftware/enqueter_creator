@@ -11,12 +11,13 @@ final ChangeNotifierProvider<SignUpViewModel> signUpViewModelProvider = ChangeNo
 class SignUpViewModel extends ChangeNotifier {
   ProviderReference _ref;
 
-  final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   String _email = '';
-  String _password = '';
-  GlobalKey<FormState> get formKey => _formKey;
   String get email => _email;
+  String _password = '';
   String get password => _password;
+
+  final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
+  GlobalKey<FormState> get formKey => _formKey;
 
   SignUpViewModel(this._ref);
 

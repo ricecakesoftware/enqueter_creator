@@ -15,10 +15,10 @@ class Answer extends ChangeNotifier {
     notifyListeners();
   }
 
-  String _userId = '';
-  String get userId => _userId;
-  set userId(String userId) {
-    _userId = userId;
+  String _userUid = '';
+  String get userUid => _userUid;
+  set userId(String userUid) {
+    _userUid = userUid;
     notifyListeners();
   }
 

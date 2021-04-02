@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class Detail extends ChangeNotifier {
+class Part extends ChangeNotifier {
   String _id = '';
   String get id => _id;
   set id(String id) {
@@ -8,10 +8,10 @@ class Detail extends ChangeNotifier {
     notifyListeners();
   }
 
-  String _outlineId = '';
-  String get outlineId => _outlineId;
-  set outlineId(String outlineId) {
-    _outlineId = outlineId;
+  String _questionnaireId = '';
+  String get questionnaireId => _questionnaireId;
+  set questionnaireId(String questionnaireId) {
+    _questionnaireId = questionnaireId;
     notifyListeners();
   }
 
@@ -26,6 +26,13 @@ class Detail extends ChangeNotifier {
   int get type => _type;
   set type(int type) {
     _type = type;
+    notifyListeners();
+  }
+
+  int _order = 0;
+  int get order => _order;
+  set order(int order) {
+    _order = order;
     notifyListeners();
   }
 }

@@ -7,6 +7,12 @@ final Provider<ProfileRepository> profileRepositoryProvider = Provider<ProfileRe
 class ProfileRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  Future<Profile> selectById(String id) async {
+    Query query = _firestore.collection('profiles').where('id', isEqualTo: id);
+    QuerySnapshot snapshot = await query.get();
+    return convertFromData(snapshot.docs[0].data()!);
+  }
+
   Future<Profile?> selectByUserUid(String userUid) async {
     Query query = _firestore.collection('profiles').where('user_uid', isEqualTo: userUid);
     QuerySnapshot snapshot = await query.get();
@@ -18,6 +24,7 @@ class ProfileRepository {
 
   Future<String?> insert(Profile profile) async {
     DocumentReference reference = await _firestore.collection('profiles').add(convertToData(profile));
+    await _firestore.collection('profiles').doc(reference.id).update({'id': reference.id});
     return reference.id;
   }
 
@@ -32,7 +39,7 @@ class ProfileRepository {
     profile.userUid = data['user_uid'];
     profile.displayName = data['display_name'];
     profile.gender = data['gender'];
-    profile.birthDate = data['birth_date'];
+    profile.birthDate = data['birth_date'].toDate();
     return profile;
   }
 
@@ -42,7 +49,7 @@ class ProfileRepository {
       'user_uid': profile.userUid,
       'display_name': profile.displayName,
       'gender': profile.gender,
-      'birth_date': profile.birthDate,
+      'birth_date': Timestamp.fromDate(profile.birthDate),
     };
   }
 }

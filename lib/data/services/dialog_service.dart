@@ -26,6 +26,7 @@ class DialogService {
   Future<DateTime?> showDatePickerDialog(DateTime initialDate) async {
     final NavigatorKey navigatorKey = NavigatorKey();
     return await showDatePicker(
+      locale: Locale('ja'),
       context: navigatorKey.value.currentContext!,
       initialDate: initialDate,
       firstDate: DateTime(1900, 1, 1),

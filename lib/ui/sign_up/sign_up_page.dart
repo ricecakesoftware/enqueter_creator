@@ -6,7 +6,7 @@ class SignUpPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     return Scaffold(
-      appBar: AppBar(title: Text('Sign Up')),
+      appBar: AppBar(title: Text('あんけたーアカウント登録')),
       body: Form(
         key: watch(signUpViewModelProvider).formKey,
         child: Column(
@@ -35,7 +35,7 @@ class SignUpPage extends ConsumerWidget {
             ),
             ElevatedButton(
               onPressed: watch(signUpViewModelProvider).signUp,
-              child: Text('Sign up'),
+              child: Text('アカウント登録'),
               style: ElevatedButton.styleFrom(
                 primary: Theme.of(context).primaryColor,
               ),

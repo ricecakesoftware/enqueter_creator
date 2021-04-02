@@ -24,14 +24,14 @@ class Profile extends ChangeNotifier {
 
   int _gender = 0;
   int get gender => _gender;
-  set gender(int userUid) {
+  set gender(int gender) {
     _gender = gender;
     notifyListeners();
   }
 
-  DateTime _birthDate = DateTime.now();
+  DateTime _birthDate = DateTime(1970, 1, 1);
   DateTime get birthDate => _birthDate;
-  set birthDate(DateTime userUid) {
+  set birthDate(DateTime birthDate) {
     _birthDate = birthDate;
     notifyListeners();
   }

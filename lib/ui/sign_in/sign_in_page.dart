@@ -6,7 +6,7 @@ class SignInPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     return Scaffold(
-      appBar: AppBar(title: Text('Sign in')),
+      appBar: AppBar(title: Text('あんけたー')),
       body: Form(
         key: watch(signInViewModelProvider).formKey,
         child: Column(
@@ -24,19 +24,24 @@ class SignInPage extends ConsumerWidget {
               autovalidateMode: AutovalidateMode.onUserInteraction,
               validator: watch(signInViewModelProvider).validatePassword,
             ),
-            ElevatedButton(
-              onPressed: watch(signInViewModelProvider).signIn,
-              child: Text('Sign in'),
-              style: ElevatedButton.styleFrom(
-                primary: Theme.of(context).primaryColor,
-              ),
-            ),
-            ElevatedButton(
-              onPressed: watch(signInViewModelProvider).navigateSignUp,
-              child: Text('Sing up'),
-              style: ElevatedButton.styleFrom(
-                primary: Theme.of(context).accentColor,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: watch(signInViewModelProvider).signIn,
+                  child: Text('ログイン'),
+                  style: ElevatedButton.styleFrom(
+                    primary: Theme.of(context).primaryColor,
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: watch(signInViewModelProvider).navigateSignUp,
+                  child: Text('アカウント登録'),
+                  style: ElevatedButton.styleFrom(
+                    primary: Theme.of(context).accentColor,
+                  ),
+                ),
+              ],
             ),
           ],
         ),

@@ -10,7 +10,7 @@ class Responder extends ChangeNotifier {
 
   String _userUid = '';
   String get userUid => _userUid;
-  set email(String userUid) {
+  set userUid(String userUid) {
     _userUid = userUid;
     notifyListeners();
   }
