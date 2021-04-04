@@ -16,7 +16,7 @@ class SignUpViewModel extends ChangeNotifier {
   String _password = '';
   String get password => _password;
 
-  final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   GlobalKey<FormState> get formKey => _formKey;
 
   SignUpViewModel(this._ref);
@@ -54,7 +54,7 @@ class SignUpViewModel extends ChangeNotifier {
           );
         });
         await _ref.watch(dialogServiceProvider).showAlertDialog('完了', 'Sign Upが完了しました。');
-        _ref.watch(navigationServiceProvider).pushReplacement('/sign_in');
+        _ref.watch(navigationServiceProvider).pop();
       } on FirebaseAuthException catch (e) {
         logger.severe(e);
         await _ref.watch(dialogServiceProvider).showAlertDialog(

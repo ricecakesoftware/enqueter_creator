@@ -9,8 +9,6 @@ final ChangeNotifierProvider<QuestionnaireViewModel> questionnaireViewModelProvi
 class QuestionnaireViewModel extends ChangeNotifier {
   ProviderReference _ref;
 
-  final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
-  GlobalKey<FormState> get formKey => _formKey;
   String _title = '';
   String get title => _title;
   String _content = '';
@@ -19,6 +17,11 @@ class QuestionnaireViewModel extends ChangeNotifier {
   DateTime get deadline => _deadline;
   List<Part> _parts = [];
   List<Part> get parts => _parts;
+
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  GlobalKey<FormState> get formKey => _formKey;
+
+  String id = '';
 
   QuestionnaireViewModel(this._ref);
 
@@ -57,14 +60,14 @@ class QuestionnaireViewModel extends ChangeNotifier {
   }
 
   void save() {
-    _ref.watch(navigationServiceProvider).pushAndRemoveUntil('/home');
+    _ref.watch(navigationServiceProvider).pop();
   }
 
   void publish() {
-    _ref.watch(navigationServiceProvider).pushAndRemoveUntil('/home');
+    _ref.watch(navigationServiceProvider).pop();
   }
 
   void delete() {
-    _ref.watch(navigationServiceProvider).pushAndRemoveUntil('/home');
+    _ref.watch(navigationServiceProvider).pop();
   }
 }

@@ -18,7 +18,7 @@ class SignInViewModel extends ChangeNotifier {
   String _password = '';
   String get password => _password;
 
-  final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   GlobalKey<FormState> get formKey => _formKey;
 
   SignInViewModel(this._ref);

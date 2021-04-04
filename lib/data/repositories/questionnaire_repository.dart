@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enqueter_creator/data/models/questionnaire.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final Provider<QuestionnaireRepository> questionnaireRepositoryProvider = Provider<QuestionnaireRepository>((ref) => QuestionnaireRepository());
+final Provider<QuestionnaireRepository> questionnaireRepositoryProvider = Provider<QuestionnaireRepository>((_) => QuestionnaireRepository());
 
 class QuestionnaireRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;

@@ -1,10 +1,18 @@
+import 'dart:async';
+
 import 'package:enqueter_creator/ui/home/home_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class HomePage extends ConsumerWidget {
+  bool _refreshed = false;
+
   @override
   Widget build(BuildContext context, ScopedReader watch) {
+    if (!_refreshed) {
+      Future.delayed(Duration(microseconds: 100), () { watch(homeViewModelProvider).refresh(); });
+      _refreshed = true;
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text('一覧'),

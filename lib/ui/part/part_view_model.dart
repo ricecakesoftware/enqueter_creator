@@ -8,14 +8,15 @@ final ChangeNotifierProvider<PartViewModel> partViewModelProvider = ChangeNotifi
 class PartViewModel extends ChangeNotifier {
   ProviderReference _ref;
 
-  final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
-  GlobalKey<FormState> get formKey => _formKey;
   String _text = '';
   String get text => _text;
   int _type = 0;
   int get type => _type;
   List<Question> _questions = [];
   List<Question> get questions => _questions;
+
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  GlobalKey<FormState> get formKey => _formKey;
 
   PartViewModel(this._ref);
 
@@ -55,10 +56,10 @@ class PartViewModel extends ChangeNotifier {
   }
 
   void save() {
-    _ref.watch(navigationServiceProvider).pushAndRemoveUntil('/questionnaire');
+    _ref.watch(navigationServiceProvider).pop();
   }
 
   void delete() {
-    _ref.watch(navigationServiceProvider).pushAndRemoveUntil('/questionnaire');
+    _ref.watch(navigationServiceProvider).pop();
   }
 }

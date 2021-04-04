@@ -54,6 +54,6 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   void navigateQuestionnaire({String? id}) {
-    _ref.watch(navigationServiceProvider).push('/questionnaire');
+    _ref.watch(navigationServiceProvider).push('/questionnaire', args: id);
   }
 }

@@ -1,7 +1,7 @@
 import 'package:enqueter_creator/utils/navigator_key.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final Provider<NavigationService> navigationServiceProvider = Provider((ref) => NavigationService());
+final Provider<NavigationService> navigationServiceProvider = Provider((_) => NavigationService());
 
 class NavigationService {
   Future<dynamic> push(String routeName, {Object? args}) {

@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 class QuestionnairePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
+    watch(questionnaireViewModelProvider).id = ModalRoute.of(context)!.settings.arguments as String;
     return Scaffold(
       appBar: AppBar(
         title: Text('アンケート'),

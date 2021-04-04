@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enqueter_creator/data/models/profile.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final Provider<ProfileRepository> profileRepositoryProvider = Provider<ProfileRepository>((ref) => ProfileRepository());
+final Provider<ProfileRepository> profileRepositoryProvider = Provider<ProfileRepository>((_) => ProfileRepository());
 
 class ProfileRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -34,7 +34,7 @@ class ProfileRepository {
   }
 
   Profile convertFromData(Map<String, dynamic> data) {
-    Profile profile = new Profile();
+    Profile profile = Profile();
     profile.id = data['id'];
     profile.userUid = data['user_uid'];
     profile.displayName = data['display_name'];

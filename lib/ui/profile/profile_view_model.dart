@@ -11,7 +11,7 @@ final ChangeNotifierProvider<ProfileViewModel> profileViewModelProvider = Change
 
 class ProfileViewModel extends ChangeNotifier {
   ProviderReference _ref;
-  Profile _profile = new Profile();
+  Profile _profile = Profile();
 
   String _id = '';
   String get id => _id;
@@ -22,7 +22,7 @@ class ProfileViewModel extends ChangeNotifier {
   DateTime _birthDate = DateTime(1970, 1, 1);
   DateTime get birthDate => _birthDate;
 
-  final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   GlobalKey<FormState> get formKey => _formKey;
 
   ProfileViewModel(this._ref) {
@@ -83,7 +83,7 @@ class ProfileViewModel extends ChangeNotifier {
             'プロフィール登録完了',
             'プロフィールが登録完了しました。'
         );
-        _ref.watch(navigationServiceProvider).pushReplacement('/home');
+        _ref.watch(navigationServiceProvider).pop();
       } catch (e, s) {
         logger.shout(e);
         logger.shout(s);
