@@ -22,7 +22,6 @@ class ProfileViewModel extends ChangeNotifier {
   ProfileRepository _profileRepository;
   DialogService _dialogService;
   NavigationService _navigationService;
-  Profile _profile = Profile();
 
   String _id = '';
   String get id => _id;
@@ -39,16 +38,14 @@ class ProfileViewModel extends ChangeNotifier {
   ProfileViewModel(this._userProfile, this._profileRepository, this._dialogService, this._navigationService) {
     Profile? profile = _userProfile.profile;
     if (profile != null) {
-      _profile = profile;
-      _id = _profile.id;
-      _displayName = _profile.displayName;
-      _gender = _profile.gender;
-      _birthDate = _profile.birthDate;
+      _id = profile.id;
+      _displayName = profile.displayName;
+      _gender = profile.gender;
+      _birthDate = profile.birthDate;
     }
   }
 
   void changeDisplayName(String value) {
-    _profile.displayName = value;
     _displayName = value;
     notifyListeners();
   }
@@ -58,15 +55,13 @@ class ProfileViewModel extends ChangeNotifier {
   }
 
   void changeGender(int? value) {
-    _profile.gender = (value != null) ? value: 2;
     _gender = value;
     notifyListeners();
   }
 
   void selectBirthDate() async {
-    DateTime? dateTime = await _dialogService.showDatePickerDialog(_profile.birthDate);
+    DateTime? dateTime = await _dialogService.showDatePickerDialog(_birthDate);
     if (dateTime != null) {
-      _profile.birthDate = dateTime;
       _birthDate = dateTime;
       notifyListeners();
     }
@@ -75,23 +70,28 @@ class ProfileViewModel extends ChangeNotifier {
   Future<void> register() async {
     if (_formKey.currentState!.validate()) {
       try {
-        _profile.userUid = _userProfile.user!.uid;
+        Profile profile = Profile();
+        profile.id = _id;
+        profile.userUid = _userProfile.user!.uid;
+        profile.displayName = _displayName;
+        profile.gender = (_gender == null) ? 2 : _gender!;
+        profile.birthDate = _birthDate;
         await _dialogService.showCircularProgressIndicatorDialog(() async {
-          if (_profile.id.isEmpty) {
-            String? id = await _profileRepository.insert(_profile);
+          if (_id.isEmpty) {
+            String? id = await _profileRepository.insert(profile);
             if (id != null) {
-              _profile.id = id;
+              profile.id = id;
             } else {
-              await _dialogService.showAlertDialog('エラー', 'ユーザー情報の登録に失敗しました。');
+              await _dialogService.showAlertDialog('エラー', 'プロフィールの登録に失敗しました。');
             }
           } else {
-            await _profileRepository.update(_profile);
+            await _profileRepository.update(profile);
           }
-          _userProfile.profile = _profile;
+          _userProfile.profile = profile;
         });
         await _dialogService.showAlertDialog(
             'プロフィール登録完了',
-            'プロフィールが登録完了しました。'
+            'プロフィールの登録が完了しました。'
         );
         _navigationService.pop();
       } catch (e, s) {

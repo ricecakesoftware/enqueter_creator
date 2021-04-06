@@ -1,5 +1,8 @@
+import 'package:enqueter_creator/constants.dart';
 import 'package:enqueter_creator/data/models/part.dart';
 import 'package:enqueter_creator/data/models/questionnaire.dart';
+import 'package:enqueter_creator/data/models/user_profile.dart';
+import 'package:enqueter_creator/data/providers/user_profile_provider.dart';
 import 'package:enqueter_creator/data/repositories/part_repository.dart';
 import 'package:enqueter_creator/data/repositories/questionnaire_repository.dart';
 import 'package:enqueter_creator/data/services/dialog_service.dart';
@@ -9,6 +12,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final ChangeNotifierProvider<QuestionnaireViewModel> questionnaireViewModelProvider = ChangeNotifierProvider(
   (ref) => QuestionnaireViewModel(
+    ref.read(userProfileProvider),
     ref.read(questionnaireRepositoryProvider),
     ref.read(partRepositoryProvider),
     ref.read(dialogServiceProvider),
@@ -17,6 +21,7 @@ final ChangeNotifierProvider<QuestionnaireViewModel> questionnaireViewModelProvi
 );
 
 class QuestionnaireViewModel extends ChangeNotifier {
+  UserProfile _userProfile;
   QuestionnaireRepository _questionnaireRepository;
   PartRepository _partRepository;
   DialogService _dialogService;
@@ -37,6 +42,7 @@ class QuestionnaireViewModel extends ChangeNotifier {
   String id = '';
 
   QuestionnaireViewModel(
+    this._userProfile,
     this._questionnaireRepository,
     this._partRepository,
     this._dialogService,
@@ -88,15 +94,79 @@ class QuestionnaireViewModel extends ChangeNotifier {
     }
   }
 
-  void save() {
-    _navigationService.pop();
+  Future<void> save() async {
+    if (_formKey.currentState!.validate()) {
+      Questionnaire questionnaire = Questionnaire();
+      questionnaire.id = id;
+      questionnaire.title = _title;
+      questionnaire.content = _content;
+      questionnaire.deadline = _deadline;
+      questionnaire.status = 0;
+      questionnaire.createdAt = DateTime.now();
+      questionnaire.createdUserUid = _userProfile.user!.uid;
+      await _dialogService.showCircularProgressIndicatorDialog(() async {
+        if (id.isEmpty) {
+          String? id = await _questionnaireRepository.insert(questionnaire);
+          if (id != null) {
+            this.id = id;
+          } else {
+            await _dialogService.showAlertDialog('エラー', 'アンケートの登録に失敗しました。');
+          }
+        } else {
+          await _questionnaireRepository.update(questionnaire);
+        }
+      });
+      await _dialogService.showAlertDialog(
+          'アンケート登録完了',
+          'アンケートの一時保存が完了しました。'
+      );
+    }
   }
 
-  void publish() {
-    _navigationService.pop();
+  void publish() async {
+    if (_formKey.currentState!.validate()) {
+      DialogResult? result = await _dialogService.showYesNoDialog(
+          'アンケート公開確認',
+          'アンケートを公開してよろしいですか？'
+      );
+      if (result == DialogResult.Yes) {
+        Questionnaire questionnaire = Questionnaire();
+        questionnaire.id = id;
+        questionnaire.title = _title;
+        questionnaire.content = _content;
+        questionnaire.deadline = _deadline;
+        questionnaire.status = 1;
+        questionnaire.createdAt = DateTime.now();
+        questionnaire.createdUserUid = _userProfile.user!.uid;
+        await _dialogService.showCircularProgressIndicatorDialog(() async {
+          await _questionnaireRepository.update(questionnaire);
+          // TODO 対応者追加
+        });
+        await _dialogService.showAlertDialog(
+            'アンケート公開完了',
+            'アンケートの公開が完了しました。'
+        );
+        _navigationService.pop();
+      }
+    }
   }
 
-  void delete() {
-    _navigationService.pop();
+  void delete() async {
+    DialogResult? result = await _dialogService.showYesNoDialog(
+        'アンケート削除確認',
+        'アンケートを削除してよろしいですか？'
+    );
+    if (result == DialogResult.Yes) {
+      Questionnaire questionnaire = Questionnaire();
+      questionnaire.id = id;
+      await _dialogService.showCircularProgressIndicatorDialog(() async {
+        await _questionnaireRepository.delete(questionnaire);
+      });
+      await _dialogService.showAlertDialog(
+          'アンケート削除完了',
+          'アンケートの削除が完了しました。'
+      );
+      _navigationService.pop();
+    }
   }
 }
