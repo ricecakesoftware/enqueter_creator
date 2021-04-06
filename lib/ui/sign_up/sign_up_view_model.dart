@@ -1,3 +1,4 @@
+import 'package:enqueter_creator/data/providers/auth_repository.dart';
 import 'package:enqueter_creator/data/services/dialog_service.dart';
 import 'package:enqueter_creator/data/services/navigation_service.dart';
 import 'package:enqueter_creator/utils/firebase_auth_exception_helper.dart';
@@ -6,10 +7,18 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final ChangeNotifierProvider<SignUpViewModel> signUpViewModelProvider = ChangeNotifierProvider((ref) => SignUpViewModel(ref));
+final ChangeNotifierProvider<SignUpViewModel> signUpViewModelProvider = ChangeNotifierProvider(
+  (ref) => SignUpViewModel(
+    ref.read(authProvider),
+    ref.read(dialogServiceProvider),
+    ref.read(navigationServiceProvider)
+  )
+);
 
 class SignUpViewModel extends ChangeNotifier {
-  ProviderReference _ref;
+  FirebaseAuth _authProvider;
+  DialogService _dialogService;
+  NavigationService _navigationService;
 
   String _email = '';
   String get email => _email;
@@ -19,7 +28,7 @@ class SignUpViewModel extends ChangeNotifier {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   GlobalKey<FormState> get formKey => _formKey;
 
-  SignUpViewModel(this._ref);
+  SignUpViewModel(this._authProvider, this._dialogService, this._navigationService);
 
   void changeEmail(String value) {
     _email = value;
@@ -46,25 +55,24 @@ class SignUpViewModel extends ChangeNotifier {
   void signUp() async {
     if (_formKey.currentState!.validate()) {
       try {
-        await _ref.watch(dialogServiceProvider).showCircularProgressIndicatorDialog(() async {
-          final FirebaseAuth auth = FirebaseAuth.instance;
-          await auth.createUserWithEmailAndPassword(
+        await _dialogService.showCircularProgressIndicatorDialog(() async {
+          await _authProvider.createUserWithEmailAndPassword(
             email: _email,
             password: _password,
           );
         });
-        await _ref.watch(dialogServiceProvider).showAlertDialog('完了', 'Sign Upが完了しました。');
-        _ref.watch(navigationServiceProvider).pop();
+        await _dialogService.showAlertDialog('完了', 'Sign Upが完了しました。');
+        _navigationService.pop();
       } on FirebaseAuthException catch (e) {
         logger.severe(e);
-        await _ref.watch(dialogServiceProvider).showAlertDialog(
+        await _dialogService.showAlertDialog(
           'Firebaseエラー',
           FirebaseAuthExceptionHelper.message(e.code)
         );
       } catch (e, s) {
         logger.shout(e);
         logger.shout(s);
-        await _ref.watch(dialogServiceProvider).showAlertDialog('例外発生', e.toString());
+        await _dialogService.showAlertDialog('例外発生', e.toString());
       }
     }
   }

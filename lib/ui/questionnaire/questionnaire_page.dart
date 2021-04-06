@@ -4,40 +4,49 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 class QuestionnairePage extends ConsumerWidget {
+  bool _refreshed = false;
+
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    watch(questionnaireViewModelProvider).id = ModalRoute.of(context)!.settings.arguments as String;
+    if (!_refreshed) {
+      String? id = ModalRoute.of(context)!.settings.arguments as String?;
+      if (id != null) {
+        context.read(questionnaireViewModelProvider).id = id;
+      }
+      Future.delayed(Duration(microseconds: 100), () { context.read(questionnaireViewModelProvider).refresh(); });
+      _refreshed = true;
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text('アンケート'),
         actions: [
           IconButton(
-              icon: Icon(Icons.refresh),
-              onPressed: watch(questionnaireViewModelProvider).refresh
+            icon: Icon(Icons.refresh),
+            onPressed: context.read(questionnaireViewModelProvider).refresh
           ),
         ],
       ),
       body: Form(
-        key: watch(questionnaireViewModelProvider).formKey,
+        key: context.read(questionnaireViewModelProvider).formKey,
         child: Column(
           children: [
             TextFormField(
               decoration: InputDecoration(labelText: 'タイトル'),
-              onChanged: watch(questionnaireViewModelProvider).changeTitle,
+              onChanged: context.read(questionnaireViewModelProvider).changeTitle,
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              validator: watch(questionnaireViewModelProvider).validateTitle,
+              validator: context.read(questionnaireViewModelProvider).validateTitle,
             ),
             TextFormField(
               decoration: InputDecoration(labelText: '内容'),
-              onChanged: watch(questionnaireViewModelProvider).changeContent,
+              onChanged: context.read(questionnaireViewModelProvider).changeContent,
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              validator: watch(questionnaireViewModelProvider).validateContent,
+              validator: context.read(questionnaireViewModelProvider).validateContent,
             ),
             Row(
               children: [
                 Text('回答期限'),
                 TextButton(
-                  onPressed: watch(questionnaireViewModelProvider).selectDeadline,
+                  onPressed: context.read(questionnaireViewModelProvider).selectDeadline,
                   child: Text(DateFormat('yyyy年MM月dd日').format(watch(questionnaireViewModelProvider).deadline)),
                 ),
               ],
@@ -47,7 +56,7 @@ class QuestionnairePage extends ConsumerWidget {
               children: [
                 Text('詳細'),
                 ElevatedButton(
-                  onPressed: watch(questionnaireViewModelProvider).navigatePart,
+                  onPressed: context.read(questionnaireViewModelProvider).navigatePart,
                   child: Icon(Icons.add),
                 ),
               ],
@@ -65,7 +74,7 @@ class QuestionnairePage extends ConsumerWidget {
                     child: ListTile(
                       title: Text(watch(questionnaireViewModelProvider).parts[index].text),
                       trailing: Icon(Icons.edit),
-                      onTap: () { watch(questionnaireViewModelProvider).navigatePart(index: index); },
+                      onTap: () { context.read(questionnaireViewModelProvider).navigatePart(index: index); },
                     ),
                   );
                 }
@@ -75,21 +84,21 @@ class QuestionnairePage extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ElevatedButton(
-                  onPressed: watch(questionnaireViewModelProvider).save,
+                  onPressed: context.read(questionnaireViewModelProvider).save,
                   child: Text('一時保存'),
                   style: ElevatedButton.styleFrom(
                     primary: Theme.of(context).accentColor,
                   ),
                 ),
-                ElevatedButton(
-                  onPressed: watch(questionnaireViewModelProvider).publish,
+                if (watch(questionnaireViewModelProvider).id.isNotEmpty) ElevatedButton(
+                  onPressed: context.read(questionnaireViewModelProvider).publish,
                   child: Text('公開'),
                   style: ElevatedButton.styleFrom(
                     primary: Theme.of(context).primaryColor,
                   ),
                 ),
-                ElevatedButton(
-                  onPressed: watch(questionnaireViewModelProvider).delete,
+                if (watch(questionnaireViewModelProvider).id.isNotEmpty) ElevatedButton(
+                  onPressed: context.read(questionnaireViewModelProvider).delete,
                   child: Text('削除'),
                   style: ElevatedButton.styleFrom(
                     primary: Theme.of(context).errorColor,

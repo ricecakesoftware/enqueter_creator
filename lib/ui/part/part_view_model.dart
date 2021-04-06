@@ -1,12 +1,16 @@
 import 'package:enqueter_creator/data/models/question.dart';
+import 'package:enqueter_creator/data/services/dialog_service.dart';
 import 'package:enqueter_creator/data/services/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final ChangeNotifierProvider<PartViewModel> partViewModelProvider = ChangeNotifierProvider((ref) => PartViewModel(ref));
+final ChangeNotifierProvider<PartViewModel> partViewModelProvider = ChangeNotifierProvider(
+  (ref) => PartViewModel(ref.read(dialogServiceProvider), ref.read(navigationServiceProvider))
+);
 
 class PartViewModel extends ChangeNotifier {
-  ProviderReference _ref;
+  DialogService _dialogService;
+  NavigationService _navigationService;
 
   String _text = '';
   String get text => _text;
@@ -18,7 +22,9 @@ class PartViewModel extends ChangeNotifier {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   GlobalKey<FormState> get formKey => _formKey;
 
-  PartViewModel(this._ref);
+  String id = '';
+
+  PartViewModel(this._dialogService, this._navigationService);
 
   void changeText(String value) {
     _text = value;
@@ -56,10 +62,10 @@ class PartViewModel extends ChangeNotifier {
   }
 
   void save() {
-    _ref.watch(navigationServiceProvider).pop();
+    _navigationService.pop();
   }
 
   void delete() {
-    _ref.watch(navigationServiceProvider).pop();
+    _navigationService.pop();
   }
 }

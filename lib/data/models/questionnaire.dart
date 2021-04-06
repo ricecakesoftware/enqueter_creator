@@ -1,13 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:enqueter_creator/data/models/model.dart';
 
-class Questionnaire extends ChangeNotifier {
-  String _id = '';
-  String get id => _id;
-  set id(String id) {
-    _id = id;
-    notifyListeners();
-  }
-
+class Questionnaire extends Model {
   String _title = '';
   String get title => _title;
   set title(String title) {

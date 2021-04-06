@@ -8,14 +8,14 @@ class SignUpPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: Text('あんけたーアカウント登録')),
       body: Form(
-        key: watch(signUpViewModelProvider).formKey,
+        key: context.read(signUpViewModelProvider).formKey,
         child: Column(
           children: [
             TextFormField(
               decoration: InputDecoration(labelText: 'メールアドレス'),
-              onChanged: watch(signUpViewModelProvider).changeEmail,
+              onChanged: context.read(signUpViewModelProvider).changeEmail,
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              validator: watch(signUpViewModelProvider).validateEmail,
+              validator: context.read(signUpViewModelProvider).validateEmail,
             ),
             TextFormField(
               decoration: InputDecoration(
@@ -23,18 +23,18 @@ class SignUpPage extends ConsumerWidget {
                 hintText: '6文字以上で入力してください',
               ),
               obscureText: true,
-              onChanged: watch(signUpViewModelProvider).changePassword,
+              onChanged: context.read(signUpViewModelProvider).changePassword,
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              validator: watch(signUpViewModelProvider).validatePassword,
+              validator: context.read(signUpViewModelProvider).validatePassword,
             ),
             TextFormField(
               decoration: InputDecoration(labelText: 'パスワード(確認用)'),
               obscureText: true,
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              validator: watch(signUpViewModelProvider).validateConfirmPassword,
+              validator: context.read(signUpViewModelProvider).validateConfirmPassword,
             ),
             ElevatedButton(
-              onPressed: watch(signUpViewModelProvider).signUp,
+              onPressed: context.read(signUpViewModelProvider).signUp,
               child: Text('アカウント登録'),
               style: ElevatedButton.styleFrom(
                 primary: Theme.of(context).primaryColor,

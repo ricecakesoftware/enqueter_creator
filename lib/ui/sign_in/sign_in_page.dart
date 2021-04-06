@@ -8,34 +8,34 @@ class SignInPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: Text('あんけたー')),
       body: Form(
-        key: watch(signInViewModelProvider).formKey,
+        key: context.read(signInViewModelProvider).formKey,
         child: Column(
           children: [
             TextFormField(
               decoration: InputDecoration(labelText: 'メールアドレス'),
-              onChanged: watch(signInViewModelProvider).changeEmail,
+              onChanged: context.read(signInViewModelProvider).changeEmail,
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              validator: watch(signInViewModelProvider).validateEmail,
+              validator: context.read(signInViewModelProvider).validateEmail,
             ),
             TextFormField(
               decoration: InputDecoration(labelText: 'パスワード'),
               obscureText: true,
-              onChanged: watch(signInViewModelProvider).changePassword,
+              onChanged: context.read(signInViewModelProvider).changePassword,
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              validator: watch(signInViewModelProvider).validatePassword,
+              validator: context.read(signInViewModelProvider).validatePassword,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ElevatedButton(
-                  onPressed: watch(signInViewModelProvider).signIn,
+                  onPressed: context.read(signInViewModelProvider).signIn,
                   child: Text('ログイン'),
                   style: ElevatedButton.styleFrom(
                     primary: Theme.of(context).primaryColor,
                   ),
                 ),
                 ElevatedButton(
-                  onPressed: watch(signInViewModelProvider).navigateSignUp,
+                  onPressed: context.read(signInViewModelProvider).navigateSignUp,
                   child: Text('アカウント登録'),
                   style: ElevatedButton.styleFrom(
                     primary: Theme.of(context).accentColor,

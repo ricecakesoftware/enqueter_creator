@@ -9,34 +9,34 @@ class ProfilePage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: Text('プロフィール')),
       body: Form(
-        key: watch(profileViewModelProvider).formKey,
+        key: context.read(profileViewModelProvider).formKey,
         child: Column(
           children: [
             TextFormField(
               decoration: InputDecoration(labelText: 'ニックネーム'),
               initialValue: watch(profileViewModelProvider).displayName,
-              onChanged: watch(profileViewModelProvider).changeDisplayName,
+              onChanged: context.read(profileViewModelProvider).changeDisplayName,
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              validator: watch(profileViewModelProvider).validateDisplayName,
+              validator: context.read(profileViewModelProvider).validateDisplayName,
             ),
             Row(
               children: [
                 Radio(
                   value: 0,
                   groupValue: watch(profileViewModelProvider).gender,
-                  onChanged: watch(profileViewModelProvider).changeGender
+                  onChanged: context.read(profileViewModelProvider).changeGender
                 ),
                 Text('男性'),
                 Radio(
                     value: 1,
                     groupValue: watch(profileViewModelProvider).gender,
-                    onChanged: watch(profileViewModelProvider).changeGender
+                    onChanged: context.read(profileViewModelProvider).changeGender
                 ),
                 Text('女性'),
                 Radio(
                     value: 2,
                     groupValue: watch(profileViewModelProvider).gender,
-                    onChanged: watch(profileViewModelProvider).changeGender
+                    onChanged: context.read(profileViewModelProvider).changeGender
                 ),
                 Text('不明'),
               ],
@@ -45,7 +45,7 @@ class ProfilePage extends ConsumerWidget {
               children: [
                 Text('生年月日'),
                 TextButton(
-                  onPressed: watch(profileViewModelProvider).selectBirthDate,
+                  onPressed: context.read(profileViewModelProvider).selectBirthDate,
                   child: Text(DateFormat('yyyy年MM月dd日').format(watch(profileViewModelProvider).birthDate)),
                 ),
               ],

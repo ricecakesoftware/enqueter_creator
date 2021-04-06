@@ -1,13 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:enqueter_creator/data/models/model.dart';
 
-class Responder extends ChangeNotifier {
-  String _id = '';
-  String get id => _id;
-  set id(String id) {
-    _id = id;
-    notifyListeners();
-  }
-
+class Responder extends Model {
   String _userUid = '';
   String get userUid => _userUid;
   set userUid(String userUid) {

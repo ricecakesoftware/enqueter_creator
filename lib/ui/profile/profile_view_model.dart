@@ -1,16 +1,27 @@
 import 'package:enqueter_creator/data/models/profile.dart';
+import 'package:enqueter_creator/data/models/user_profile.dart';
+import 'package:enqueter_creator/data/providers/user_profile_provider.dart';
 import 'package:enqueter_creator/data/repositories/profile_repository.dart';
 import 'package:enqueter_creator/data/services/dialog_service.dart';
 import 'package:enqueter_creator/data/services/navigation_service.dart';
 import 'package:enqueter_creator/utils/logger.dart';
-import 'package:enqueter_creator/utils/user_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final ChangeNotifierProvider<ProfileViewModel> profileViewModelProvider = ChangeNotifierProvider((ref) => ProfileViewModel(ref));
+final ChangeNotifierProvider<ProfileViewModel> profileViewModelProvider = ChangeNotifierProvider(
+  (ref) => ProfileViewModel(
+    ref.read(userProfileProvider),
+    ref.read(profileRepositoryProvider),
+    ref.read(dialogServiceProvider),
+    ref.read(navigationServiceProvider)
+  )
+);
 
 class ProfileViewModel extends ChangeNotifier {
-  ProviderReference _ref;
+  UserProfile _userProfile;
+  ProfileRepository _profileRepository;
+  DialogService _dialogService;
+  NavigationService _navigationService;
   Profile _profile = Profile();
 
   String _id = '';
@@ -25,10 +36,10 @@ class ProfileViewModel extends ChangeNotifier {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   GlobalKey<FormState> get formKey => _formKey;
 
-  ProfileViewModel(this._ref) {
-    UserProfile userProfile = UserProfile();
-    if (userProfile.profile != null) {
-      _profile = userProfile.profile!;
+  ProfileViewModel(this._userProfile, this._profileRepository, this._dialogService, this._navigationService) {
+    Profile? profile = _userProfile.profile;
+    if (profile != null) {
+      _profile = profile;
       _id = _profile.id;
       _displayName = _profile.displayName;
       _gender = _profile.gender;
@@ -53,7 +64,7 @@ class ProfileViewModel extends ChangeNotifier {
   }
 
   void selectBirthDate() async {
-    DateTime? dateTime = await _ref.watch(dialogServiceProvider).showDatePickerDialog(_profile.birthDate);
+    DateTime? dateTime = await _dialogService.showDatePickerDialog(_profile.birthDate);
     if (dateTime != null) {
       _profile.birthDate = dateTime;
       _birthDate = dateTime;
@@ -64,30 +75,29 @@ class ProfileViewModel extends ChangeNotifier {
   Future<void> register() async {
     if (_formKey.currentState!.validate()) {
       try {
-        UserProfile userProfile = UserProfile();
-        _profile.userUid = userProfile.user!.uid;
-        await _ref.watch(dialogServiceProvider).showCircularProgressIndicatorDialog(() async {
+        _profile.userUid = _userProfile.user!.uid;
+        await _dialogService.showCircularProgressIndicatorDialog(() async {
           if (_profile.id.isEmpty) {
-            String? id = await _ref.watch(profileRepositoryProvider).insert(_profile);
+            String? id = await _profileRepository.insert(_profile);
             if (id != null) {
               _profile.id = id;
             } else {
-              await _ref.watch(dialogServiceProvider).showAlertDialog('エラー', 'ユーザー情報の登録に失敗しました。');
+              await _dialogService.showAlertDialog('エラー', 'ユーザー情報の登録に失敗しました。');
             }
           } else {
-            await _ref.watch(profileRepositoryProvider).update(_profile);
+            await _profileRepository.update(_profile);
           }
-          userProfile.profile = _profile;
+          _userProfile.profile = _profile;
         });
-        await _ref.watch(dialogServiceProvider).showAlertDialog(
+        await _dialogService.showAlertDialog(
             'プロフィール登録完了',
             'プロフィールが登録完了しました。'
         );
-        _ref.watch(navigationServiceProvider).pop();
+        _navigationService.pop();
       } catch (e, s) {
         logger.shout(e);
         logger.shout(s);
-        await _ref.watch(dialogServiceProvider).showAlertDialog('例外発生', e.toString());
+        await _dialogService.showAlertDialog('例外発生', e.toString());
       }
     }
   }

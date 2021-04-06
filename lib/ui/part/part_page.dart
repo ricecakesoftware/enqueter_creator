@@ -8,14 +8,14 @@ class PartPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: Text('アンケート詳細')),
       body: Form(
-        key: watch(partViewModelProvider).formKey,
+        key: context.read(partViewModelProvider).formKey,
         child: Column(
           children: [
             TextFormField(
               decoration: InputDecoration(labelText: 'テキスト'),
-              onChanged: watch(partViewModelProvider).changeText,
+              onChanged: context.read(partViewModelProvider).changeText,
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              validator: watch(partViewModelProvider).validateText,
+              validator: context.read(partViewModelProvider).validateText,
             ),
             DropdownButton(
               isExpanded: true,
@@ -50,14 +50,14 @@ class PartPage extends ConsumerWidget {
                 ),
               ],
               value: watch(partViewModelProvider).type,
-              onChanged: watch(partViewModelProvider).changeType,
+              onChanged: context.read(partViewModelProvider).changeType,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text('小問'),
                 ElevatedButton(
-                  onPressed: watch(partViewModelProvider).addQuestion,
+                  onPressed: context.read(partViewModelProvider).addQuestion,
                   child: Icon(Icons.add),
                 ),
               ],
@@ -76,12 +76,12 @@ class PartPage extends ConsumerWidget {
                         title: TextFormField(
                           decoration: InputDecoration(labelText: 'テキスト'),
                           initialValue: watch(partViewModelProvider).questions[index].text,
-                          onChanged: (value) { watch(partViewModelProvider).changeQuestionText(index, value); },
+                          onChanged: (value) { context.read(partViewModelProvider).changeQuestionText(index, value); },
                           autovalidateMode: AutovalidateMode.onUserInteraction,
-                          validator: watch(partViewModelProvider).validateQuestionText,
+                          validator: context.read(partViewModelProvider).validateQuestionText,
                         ),
                         trailing: ElevatedButton(
-                          onPressed: () { watch(partViewModelProvider).deleteQuestion(index); },
+                          onPressed: () { context.read(partViewModelProvider).deleteQuestion(index); },
                           child: Icon(Icons.delete),
                         ),
                       ),
@@ -93,14 +93,14 @@ class PartPage extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ElevatedButton(
-                  onPressed: watch(partViewModelProvider).save,
+                  onPressed: context.read(partViewModelProvider).save,
                   child: Text('保存'),
                   style: ElevatedButton.styleFrom(
                     primary: Theme.of(context).primaryColor,
                   ),
                 ),
-                ElevatedButton(
-                  onPressed: watch(partViewModelProvider).delete,
+                if (watch(partViewModelProvider).id.isNotEmpty) ElevatedButton(
+                  onPressed: context.read(partViewModelProvider).delete,
                   child: Text('削除'),
                   style: ElevatedButton.styleFrom(
                     primary: Theme.of(context).errorColor,

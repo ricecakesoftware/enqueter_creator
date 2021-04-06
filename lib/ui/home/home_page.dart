@@ -10,7 +10,7 @@ class HomePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     if (!_refreshed) {
-      Future.delayed(Duration(microseconds: 100), () { watch(homeViewModelProvider).refresh(); });
+      Future.delayed(Duration(microseconds: 100), () { context.read(homeViewModelProvider).refresh(); });
       _refreshed = true;
     }
     return Scaffold(
@@ -19,11 +19,11 @@ class HomePage extends ConsumerWidget {
         actions: [
           IconButton(
             icon: Icon(Icons.refresh),
-            onPressed: watch(homeViewModelProvider).refresh
+            onPressed: context.read(homeViewModelProvider).refresh
           ),
           IconButton(
             icon: Icon(Icons.account_box),
-            onPressed: watch(homeViewModelProvider).navigateProfile
+            onPressed: context.read(homeViewModelProvider).navigateProfile
           ),
         ],
       ),
@@ -34,7 +34,7 @@ class HomePage extends ConsumerWidget {
             children: [
               Text('作成中'),
               ElevatedButton(
-                onPressed: watch(homeViewModelProvider).navigateQuestionnaire,
+                onPressed: context.read(homeViewModelProvider).navigateQuestionnaire,
                 child: Icon(Icons.add),
               ),
             ],

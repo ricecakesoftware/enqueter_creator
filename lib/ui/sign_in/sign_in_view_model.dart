@@ -1,17 +1,31 @@
+import 'package:enqueter_creator/data/models/user_profile.dart';
+import 'package:enqueter_creator/data/providers/auth_repository.dart';
+import 'package:enqueter_creator/data/providers/user_profile_provider.dart';
 import 'package:enqueter_creator/data/services/dialog_service.dart';
 import 'package:enqueter_creator/data/services/navigation_service.dart';
 import 'package:enqueter_creator/data/repositories/profile_repository.dart';
 import 'package:enqueter_creator/utils/firebase_auth_exception_helper.dart';
 import 'package:enqueter_creator/utils/logger.dart';
-import 'package:enqueter_creator/utils/user_profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final ChangeNotifierProvider<SignInViewModel> signInViewModelProvider = ChangeNotifierProvider((ref) => SignInViewModel(ref));
+final ChangeNotifierProvider<SignInViewModel> signInViewModelProvider = ChangeNotifierProvider(
+  (ref) => SignInViewModel(
+    ref.read(userProfileProvider),
+    ref.read(authProvider),
+    ref.read(profileRepositoryProvider),
+    ref.read(dialogServiceProvider),
+    ref.read(navigationServiceProvider)
+  )
+);
 
 class SignInViewModel extends ChangeNotifier {
-  ProviderReference _ref;
+  UserProfile _userProfile;
+  FirebaseAuth _authProvider;
+  ProfileRepository _profileRepository;
+  DialogService _dialogService;
+  NavigationService _navigationService;
 
   String _email = '';
   String get email => _email;
@@ -21,7 +35,7 @@ class SignInViewModel extends ChangeNotifier {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   GlobalKey<FormState> get formKey => _formKey;
 
-  SignInViewModel(this._ref);
+  SignInViewModel(this._userProfile, this._authProvider, this._profileRepository, this._dialogService, this._navigationService);
 
   void changeEmail(String value) {
     _email = value;
@@ -44,40 +58,38 @@ class SignInViewModel extends ChangeNotifier {
   void signIn() async {
     if (_formKey.currentState!.validate()) {
       try {
-        UserProfile userProfile = UserProfile();
-        await _ref.watch(dialogServiceProvider).showCircularProgressIndicatorDialog(() async {
-          final FirebaseAuth auth = FirebaseAuth.instance;
-          final UserCredential result = await auth.signInWithEmailAndPassword(
+        await _dialogService.showCircularProgressIndicatorDialog(() async {
+          final UserCredential result = await _authProvider.signInWithEmailAndPassword(
             email: _email,
             password: _password,
           );
-          userProfile.user = result.user!;
-          userProfile.profile = await _ref.watch(profileRepositoryProvider).selectByUserUid(result.user!.uid);
+          _userProfile.user = result.user!;
+          _userProfile.profile = await _profileRepository.selectByUserUid(result.user!.uid);
         });
-        if (userProfile.profile == null) {
-          await _ref.watch(dialogServiceProvider).showAlertDialog(
+        if (_userProfile.profile == null) {
+          await _dialogService.showAlertDialog(
               'プロフィール未登録',
               'プロフィールが登録されていません。先にプロフィールの登録をお願いします。'
           );
-          _ref.watch(navigationServiceProvider).pushReplacement('/profile');
+          _navigationService.pushReplacement('/profile');
         } else {
-          _ref.watch(navigationServiceProvider).pushReplacement('/home');
+          _navigationService.pushReplacement('/home');
         }
       } on FirebaseAuthException catch (e) {
         logger.severe(e);
-        await _ref.watch(dialogServiceProvider).showAlertDialog(
+        await _dialogService.showAlertDialog(
           'Firebaseエラー',
           FirebaseAuthExceptionHelper.message(e.code)
         );
       } catch (e, s) {
         logger.shout(e);
         logger.shout(s);
-        await _ref.watch(dialogServiceProvider).showAlertDialog('例外発生', e.toString());
+        await _dialogService.showAlertDialog('例外発生', e.toString());
       }
     }
   }
 
   void navigateSignUp() {
-    _ref.watch(navigationServiceProvider).push('/sign_up');
+    _navigationService.push('/sign_up');
   }
 }
