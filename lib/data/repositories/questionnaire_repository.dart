@@ -9,18 +9,14 @@ class QuestionnaireRepository extends Repository<Questionnaire> {
   QuestionnaireRepository() : super('questionnaires');
 
   Future<List<Questionnaire>> selectByCreatedUserUidAndStatus(String userUid, int status) async {
-    Query query = firestore.collection('questionnaires')
-      .where('created_user_uid', isEqualTo: userUid)
-      .where('status', isEqualTo: status)
-      .orderBy('created_at');
-    QuerySnapshot snapshot = await query.get();
-    List<Questionnaire> resultList = [];
-    for (int i = 0; i < snapshot.size; i++) {
-      resultList.add(convertFromData(snapshot.docs[i].data()!));
-    }
-    return resultList;
+    return await select(
+      firestore.collection('questionnaires')
+        .where('created_user_uid', isEqualTo: userUid)
+        .where('status', isEqualTo: status)
+        .orderBy('created_at'));
   }
 
+  @override
   Questionnaire convertFromData(Map<String, dynamic> data) {
     Questionnaire questionnaire = new Questionnaire();
     questionnaire.id = data['id'];
@@ -33,6 +29,7 @@ class QuestionnaireRepository extends Repository<Questionnaire> {
     return questionnaire;
   }
 
+  @override
   Map<String, dynamic> convertToData(Questionnaire questionnaire) {
     return {
       'id': questionnaire.id,

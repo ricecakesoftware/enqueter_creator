@@ -19,10 +19,10 @@ class NavigationService {
     return navigatorKey.value.currentState!.pushNamedAndRemoveUntil(routeName, (_) => false, arguments: args);
   }
 
-  bool pop() {
+  bool pop({Object? result}) {
     final NavigatorKey navigatorKey = NavigatorKey();
     if (navigatorKey.value.currentState!.canPop()) {
-      navigatorKey.value.currentState!.pop();
+      navigatorKey.value.currentState!.pop(result);
       return true;
     } else {
       return false;

@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enqueter_creator/data/models/part.dart';
 import 'package:enqueter_creator/data/repositories/repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,15 +8,14 @@ class PartRepository extends Repository<Part> {
   PartRepository() : super('parts');
 
   Future<List<Part>> selectByQuestionnaireId(String questionnaireId) async {
-    Query query = firestore.collection('parts').where('questionnaire_id', isEqualTo: questionnaireId);
-    QuerySnapshot snapshot = await query.get();
-    List<Part> resultList = [];
-    for (int i = 0; i < snapshot.size; i++) {
-      resultList.add(convertFromData(snapshot.docs[i].data()!));
-    }
-    return resultList;
+    return await select(firestore.collection('parts').where('questionnaire_id', isEqualTo: questionnaireId));
   }
 
+  Future<void> deleteByQuestionnaireId(String questionnaireId) async {
+    await delete(firestore.collection('parts').where('questionnaire_id', isEqualTo: questionnaireId));
+  }
+
+  @override
   Part convertFromData(Map<String, dynamic> data) {
     Part part = Part();
     part.id = data['id'];
@@ -27,6 +25,7 @@ class PartRepository extends Repository<Part> {
     return part;
   }
 
+  @override
   Map<String, dynamic> convertToData(Part part) {
     return {
       'id': part.id,

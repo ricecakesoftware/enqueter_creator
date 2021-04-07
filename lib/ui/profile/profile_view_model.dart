@@ -93,7 +93,11 @@ class ProfileViewModel extends ChangeNotifier {
             'プロフィール登録完了',
             'プロフィールの登録が完了しました。'
         );
-        _navigationService.pop();
+        if (id.isNotEmpty) {
+          _navigationService.pop();
+        } else {
+          _navigationService.pushReplacement('/home');
+        }
       } catch (e, s) {
         logger.shout(e);
         logger.shout(s);

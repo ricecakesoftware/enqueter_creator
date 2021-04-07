@@ -1,10 +1,21 @@
 import 'package:enqueter_creator/ui/part/part_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class PartPage extends ConsumerWidget {
+  bool _refreshed = false;
+
   @override
   Widget build(BuildContext context, ScopedReader watch) {
+    if (!_refreshed) {
+      String? id = ModalRoute.of(context)!.settings.arguments as String?;
+      if (id != null) {
+        context.read(partViewModelProvider).id = id;
+      }
+      Future.delayed(Duration(microseconds: 100), () { context.read(partViewModelProvider).refresh(); });
+      _refreshed = true;
+    }
     return Scaffold(
       appBar: AppBar(title: Text('アンケート詳細')),
       body: Form(
@@ -51,6 +62,14 @@ class PartPage extends ConsumerWidget {
               ],
               value: watch(partViewModelProvider).type,
               onChanged: context.read(partViewModelProvider).changeType,
+            ),
+            TextFormField(
+              decoration: InputDecoration(labelText: '順番'),
+              onChanged: context.read(partViewModelProvider).changeOrder,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              validator: context.read(partViewModelProvider).validateOrder,
+              keyboardType: TextInputType.number,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -60,11 +60,12 @@ class HomeViewModel extends ChangeNotifier {
     }
   }
 
-  void navigateProfile() {
-    _navigationService.push('/profile');
+  void navigateProfile() async {
+    await _navigationService.push('/profile');
   }
 
-  void navigateQuestionnaire({String? id}) {
-    _navigationService.push('/questionnaire', args: id);
+  void navigateQuestionnaire({String? id}) async {
+    await _navigationService.push('/questionnaire', args: id);
+    refresh();
   }
 }

@@ -9,10 +9,18 @@ abstract class Repository<T extends Model> {
 
   Repository(this._collectionName);
 
-  Future<T> selectById(String id) async {
-    Query query = firestore.collection(_collectionName).where('id', isEqualTo: id);
+  Future<List<T>> select(Query query) async {
     QuerySnapshot snapshot = await query.get();
-    return convertFromData(snapshot.docs[0].data()!);
+    List<T> resultList = [];
+    for (int i = 0; i < snapshot.size; i++) {
+      resultList.add(convertFromData(snapshot.docs[i].data()!));
+    }
+    return resultList;
+  }
+
+  Future<T> selectById(String id) async {
+    List<T> resultList = await select(firestore.collection(_collectionName).where('id', isEqualTo: id));
+    return resultList[0];
   }
 
   Future<String?> insert(T t) async {
@@ -26,9 +34,15 @@ abstract class Repository<T extends Model> {
     await reference.update(convertToData(t));
   }
 
-  Future<void> delete(T t) async {
-    DocumentReference reference = firestore.collection(_collectionName).doc(t.id);
-    await reference.delete();
+  Future<void> delete(Query query) async {
+    QuerySnapshot snapshot = await query.get();
+    for (int i = 0; i < snapshot.size; i++) {
+      await snapshot.docs[i].reference.delete();
+    }
+  }
+
+  Future<void> deleteById(String id) async {
+    await delete(firestore.collection(_collectionName).where('id', isEqualTo: id));
   }
 
   T convertFromData(Map<String, dynamic> data);

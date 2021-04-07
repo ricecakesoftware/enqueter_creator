@@ -9,14 +9,11 @@ class ProfileRepository extends Repository<Profile> {
   ProfileRepository() : super('profiles');
 
   Future<Profile?> selectByUserUid(String userUid) async {
-    Query query = firestore.collection('profiles').where('user_uid', isEqualTo: userUid);
-    QuerySnapshot snapshot = await query.get();
-    if (snapshot.size > 0) {
-      return convertFromData(snapshot.docs[0].data()!);
-    }
-    return null;
+    List<Profile> resultList = await select(firestore.collection('profiles').where('user_uid', isEqualTo: userUid));
+    return (resultList.isNotEmpty) ? resultList[0] : null;
   }
 
+  @override
   Profile convertFromData(Map<String, dynamic> data) {
     Profile profile = Profile();
     profile.id = data['id'];
@@ -27,6 +24,7 @@ class ProfileRepository extends Repository<Profile> {
     return profile;
   }
 
+  @override
   Map<String, dynamic> convertToData(Profile profile) {
     return {
       'id': profile.id,

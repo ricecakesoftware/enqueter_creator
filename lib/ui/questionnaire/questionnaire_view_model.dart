@@ -46,7 +46,8 @@ class QuestionnaireViewModel extends ChangeNotifier {
     this._questionnaireRepository,
     this._partRepository,
     this._dialogService,
-    this._navigationService);
+    this._navigationService
+  );
 
   void refresh() async {
     if (id.isNotEmpty) {
@@ -86,12 +87,13 @@ class QuestionnaireViewModel extends ChangeNotifier {
     }
   }
 
-  void navigatePart({int? index}) {
+  void navigatePart({int? index}) async {
     if (index != null) {
-      _navigationService.push('/part', args: _parts[index].id);
+      await _navigationService.push('/part', args: _parts[index].id);
     } else {
-      _navigationService.push('/part');
+      await _navigationService.push('/part');
     }
+    refresh();
   }
 
   Future<void> save() async {
@@ -146,7 +148,7 @@ class QuestionnaireViewModel extends ChangeNotifier {
             'アンケート公開完了',
             'アンケートの公開が完了しました。'
         );
-        _navigationService.pop();
+        _navigationService.pop(result: id);
       }
     }
   }
@@ -157,10 +159,9 @@ class QuestionnaireViewModel extends ChangeNotifier {
         'アンケートを削除してよろしいですか？'
     );
     if (result == DialogResult.Yes) {
-      Questionnaire questionnaire = Questionnaire();
-      questionnaire.id = id;
       await _dialogService.showCircularProgressIndicatorDialog(() async {
-        await _questionnaireRepository.delete(questionnaire);
+        await _questionnaireRepository.deleteById(id);
+        await _partRepository.deleteByQuestionnaireId(id);
       });
       await _dialogService.showAlertDialog(
           'アンケート削除完了',
