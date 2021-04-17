@@ -1,4 +1,4 @@
-import 'package:enqueter_creator/data/providers/auth_repository.dart';
+import 'package:enqueter_creator/data/providers/auth_provider.dart';
 import 'package:enqueter_creator/data/services/dialog_service.dart';
 import 'package:enqueter_creator/data/services/navigation_service.dart';
 import 'package:enqueter_creator/utils/firebase_auth_exception_helper.dart';

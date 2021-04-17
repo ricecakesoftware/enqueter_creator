@@ -34,6 +34,7 @@ class PartViewModel extends ChangeNotifier {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   GlobalKey<FormState> get formKey => _formKey;
 
+  String questionnaireId = '';
   String id = '';
 
   PartViewModel(
@@ -44,15 +45,23 @@ class PartViewModel extends ChangeNotifier {
   );
 
   void refresh() async {
-    if (id.isNotEmpty) {
-      Part part = await _partRepository.selectById(id);
-      _text = part.text;
-      _type = part.type;
-      _order = part.order;
-      List<Question> questions = await _questionRepository.selectByPartId(id);
-      _questions.addAll(questions);
+    await _dialogService.showCircularProgressIndicatorDialog(() async {
+      if (id.isNotEmpty) {
+        Part part = await _partRepository.selectById(id);
+        _text = part.text;
+        _type = part.type;
+        _order = part.order;
+        _questions.clear();
+        List<Question> questions = await _questionRepository.selectByPartId(id);
+        _questions.addAll(questions);
+      } else {
+        _text = '';
+        _type = 0;
+        _order = 0;
+        _questions.clear();
+      }
       notifyListeners();
-    }
+    });
   }
 
   void changeText(String value) {
@@ -100,12 +109,13 @@ class PartViewModel extends ChangeNotifier {
   }
 
   void save() async {
-    Part part = Part();
-    part.id = id;
-    part.text = _text;
-    part.type = _type;
-    part.order = _order;
     await _dialogService.showCircularProgressIndicatorDialog(() async {
+      Part part = Part();
+      part.id = id;
+      part.questionnaireId = questionnaireId;
+      part.text = _text;
+      part.type = _type;
+      part.order = _order;
       if (id.isEmpty) {
         String? id = await _partRepository.insert(part);
         if (id != null) {

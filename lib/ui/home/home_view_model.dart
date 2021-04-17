@@ -1,3 +1,4 @@
+import 'package:enqueter_creator/constants.dart';
 import 'package:enqueter_creator/data/models/questionnaire.dart';
 import 'package:enqueter_creator/data/models/user_profile.dart';
 import 'package:enqueter_creator/data/providers/user_profile_provider.dart';
@@ -34,10 +35,10 @@ class HomeViewModel extends ChangeNotifier {
 
   void refresh() async {
     try {
-      String userUid = _userProfile.user!.uid;
       await _dialogService.showCircularProgressIndicatorDialog(() async {
-        List<Questionnaire> creatings = await _questionnaireRepository.selectByCreatedUserUidAndStatus(userUid, 0);
-        List<Questionnaire> openings = await _questionnaireRepository.selectByCreatedUserUidAndStatus(userUid, 1);
+        String userUid = _userProfile.user!.uid;
+        List<Questionnaire> creatings = await _questionnaireRepository.selectByCreatedUserUidAndStatus(userUid, QuestionnaireStatus.Creating);
+        List<Questionnaire> openings = await _questionnaireRepository.selectByCreatedUserUidAndStatus(userUid, QuestionnaireStatus.Published);
         openings.sort((q1, q2) => q1.deadline.compareTo(q2.deadline));
         _creatings.clear();
         _answerings.clear();

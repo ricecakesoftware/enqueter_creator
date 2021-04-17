@@ -1,3 +1,4 @@
+import 'package:enqueter_creator/constants.dart';
 import 'package:enqueter_creator/data/models/profile.dart';
 import 'package:enqueter_creator/data/models/user_profile.dart';
 import 'package:enqueter_creator/data/providers/user_profile_provider.dart';
@@ -29,7 +30,7 @@ class ProfileViewModel extends ChangeNotifier {
   String get displayName => _displayName;
   int? _gender = 0;
   int? get gender => _gender;
-  DateTime _birthDate = DateTime(1970, 1, 1);
+  DateTime _birthDate = dateTimeMinimum;
   DateTime get birthDate => _birthDate;
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -40,7 +41,7 @@ class ProfileViewModel extends ChangeNotifier {
     if (profile != null) {
       _id = profile.id;
       _displayName = profile.displayName;
-      _gender = profile.gender;
+      _gender = profile.gender.index;
       _birthDate = profile.birthDate;
     }
   }
@@ -74,7 +75,7 @@ class ProfileViewModel extends ChangeNotifier {
         profile.id = _id;
         profile.userUid = _userProfile.user!.uid;
         profile.displayName = _displayName;
-        profile.gender = (_gender == null) ? 2 : _gender!;
+        profile.gender = (_gender == null) ? Gender.Unknown : Gender.values[_gender!];
         profile.birthDate = _birthDate;
         await _dialogService.showCircularProgressIndicatorDialog(() async {
           if (_id.isEmpty) {

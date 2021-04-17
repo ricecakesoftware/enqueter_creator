@@ -103,12 +103,6 @@ class HomePage extends ConsumerWidget {
                   ),
                   child: ListTile(
                     title: Text(watch(homeViewModelProvider).finishings[index].title),
-                    trailing: ElevatedButton(
-                      onPressed: () {
-                        watch(homeViewModelProvider).navigateQuestionnaire(id: watch(homeViewModelProvider).finishings[index].id);
-                      },
-                      child: Icon(Icons.arrow_right),
-                    ),
                   ),
                 );
               }

@@ -9,10 +9,9 @@ class PartPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     if (!_refreshed) {
-      String? id = ModalRoute.of(context)!.settings.arguments as String?;
-      if (id != null) {
-        context.read(partViewModelProvider).id = id;
-      }
+      List<String> ids = ModalRoute.of(context)!.settings.arguments as List<String>;
+      context.read(partViewModelProvider).questionnaireId = ids[0];
+      context.read(partViewModelProvider).id = ids[1];
       Future.delayed(Duration(microseconds: 100), () { context.read(partViewModelProvider).refresh(); });
       _refreshed = true;
     }
@@ -24,6 +23,7 @@ class PartPage extends ConsumerWidget {
           children: [
             TextFormField(
               decoration: InputDecoration(labelText: 'テキスト'),
+              initialValue: context.read(partViewModelProvider).text,
               onChanged: context.read(partViewModelProvider).changeText,
               autovalidateMode: AutovalidateMode.onUserInteraction,
               validator: context.read(partViewModelProvider).validateText,
@@ -65,6 +65,7 @@ class PartPage extends ConsumerWidget {
             ),
             TextFormField(
               decoration: InputDecoration(labelText: '順番'),
+              initialValue: context.read(partViewModelProvider).order.toString(),
               onChanged: context.read(partViewModelProvider).changeOrder,
               autovalidateMode: AutovalidateMode.onUserInteraction,
               validator: context.read(partViewModelProvider).validateOrder,

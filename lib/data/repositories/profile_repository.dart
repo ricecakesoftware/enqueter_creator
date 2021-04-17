@@ -8,6 +8,11 @@ final Provider<ProfileRepository> profileRepositoryProvider = Provider<ProfileRe
 class ProfileRepository extends Repository<Profile> {
   ProfileRepository() : super('profiles');
 
+  Future<List<Profile>> selectAll() async {
+    List<Profile> resultList = await select(firestore.collection('profiles'));
+    return resultList;
+  }
+
   Future<Profile?> selectByUserUid(String userUid) async {
     List<Profile> resultList = await select(firestore.collection('profiles').where('user_uid', isEqualTo: userUid));
     return (resultList.isNotEmpty) ? resultList[0] : null;

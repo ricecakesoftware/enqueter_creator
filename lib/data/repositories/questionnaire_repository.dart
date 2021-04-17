@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:enqueter_creator/constants.dart';
 import 'package:enqueter_creator/data/models/questionnaire.dart';
 import 'package:enqueter_creator/data/repositories/repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,11 +9,11 @@ final Provider<QuestionnaireRepository> questionnaireRepositoryProvider = Provid
 class QuestionnaireRepository extends Repository<Questionnaire> {
   QuestionnaireRepository() : super('questionnaires');
 
-  Future<List<Questionnaire>> selectByCreatedUserUidAndStatus(String userUid, int status) async {
+  Future<List<Questionnaire>> selectByCreatedUserUidAndStatus(String userUid, QuestionnaireStatus status) async {
     return await select(
       firestore.collection('questionnaires')
         .where('created_user_uid', isEqualTo: userUid)
-        .where('status', isEqualTo: status)
+        .where('status', isEqualTo: status.index)
         .orderBy('created_at'));
   }
 

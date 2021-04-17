@@ -10,9 +10,7 @@ class QuestionnairePage extends ConsumerWidget {
   Widget build(BuildContext context, ScopedReader watch) {
     if (!_refreshed) {
       String? id = ModalRoute.of(context)!.settings.arguments as String?;
-      if (id != null) {
-        context.read(questionnaireViewModelProvider).id = id;
-      }
+      context.read(questionnaireViewModelProvider).id = (id != null) ? id : '';
       Future.delayed(Duration(microseconds: 100), () { context.read(questionnaireViewModelProvider).refresh(); });
       _refreshed = true;
     }
@@ -32,12 +30,14 @@ class QuestionnairePage extends ConsumerWidget {
           children: [
             TextFormField(
               decoration: InputDecoration(labelText: 'タイトル'),
+              initialValue: context.read(questionnaireViewModelProvider).title,
               onChanged: context.read(questionnaireViewModelProvider).changeTitle,
               autovalidateMode: AutovalidateMode.onUserInteraction,
               validator: context.read(questionnaireViewModelProvider).validateTitle,
             ),
             TextFormField(
               decoration: InputDecoration(labelText: '内容'),
+              initialValue: context.read(questionnaireViewModelProvider).content,
               onChanged: context.read(questionnaireViewModelProvider).changeContent,
               autovalidateMode: AutovalidateMode.onUserInteraction,
               validator: context.read(questionnaireViewModelProvider).validateContent,

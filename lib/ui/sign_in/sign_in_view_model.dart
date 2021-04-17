@@ -1,5 +1,5 @@
 import 'package:enqueter_creator/data/models/user_profile.dart';
-import 'package:enqueter_creator/data/providers/auth_repository.dart';
+import 'package:enqueter_creator/data/providers/auth_provider.dart';
 import 'package:enqueter_creator/data/providers/user_profile_provider.dart';
 import 'package:enqueter_creator/data/services/dialog_service.dart';
 import 'package:enqueter_creator/data/services/navigation_service.dart';
